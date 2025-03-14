@@ -106,6 +106,18 @@ export class MemStorage implements IStorage {
   }
   
   private initializeData(): void {
+    // Create super admin account
+    this.createUser({
+      username: "admin",
+      password: "$2b$10$oPGP/WZQ2XFDUqMsbTJgPeYzcRCRGUkWAMVcAQ5LTwzpVrUte3z2.", // hashed password: "admin123"
+      email: "admin@bosan.org.ng",
+      fullName: "Super Administrator",
+      role: "admin",
+      specialty: "Administration",
+      yearElevated: "N/A",
+      profileImage: null
+    });
+    
     // Sample announcements
     this.createAnnouncement({
       title: "Annual Conference 2023",

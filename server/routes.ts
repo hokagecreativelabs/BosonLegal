@@ -1,4 +1,4 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
@@ -6,6 +6,10 @@ import {
   insertContactMessageSchema, 
   insertEventRegistrationSchema,
   insertPaymentSchema,
+  insertEventSchema,
+  insertResourceSchema,
+  insertAnnouncementSchema,
+  insertUserSchema,
 } from "@shared/schema";
 import { z } from "zod";
 import { format } from "date-fns";
@@ -189,6 +193,182 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin API endpoints
+  // 1. Event Management
+  app.post("/api/admin/events", ensureAdmin, async (req, res) => {
+    try {
+      const validData = insertEventSchema.parse(req.body);
+      const event = await storage.createEvent(validData);
+      res.status(201).json(event);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json({ error: "An unexpected error occurred" });
+      }
+    }
+  });
+
+  app.put("/api/admin/events/:id", ensureAdmin, async (req, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const event = await storage.getEvent(eventId);
+      
+      if (!event) {
+        return res.status(404).json({ error: "Event not found" });
+      }
+      
+      const updatedEvent = await storage.updateEvent(eventId, req.body);
+      res.json(updatedEvent);
+    } catch (error) {
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
+  });
+
+  // 2. Announcement Management
+  app.post("/api/admin/announcements", ensureAdmin, async (req, res) => {
+    try {
+      const validData = insertAnnouncementSchema.parse(req.body);
+      const announcement = await storage.createAnnouncement(validData);
+      res.status(201).json(announcement);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json({ error: "An unexpected error occurred" });
+      }
+    }
+  });
+
+  // 3. Resource Management
+  app.post("/api/admin/resources", ensureAdmin, async (req, res) => {
+    try {
+      const validData = insertResourceSchema.parse(req.body);
+      const resource = await storage.createResource(validData);
+      res.status(201).json(resource);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json({ error: "An unexpected error occurred" });
+      }
+    }
+  });
+
+  // 4. Member (User) Management
+  app.get("/api/admin/users", ensureAdmin, async (req, res) => {
+    try {
+      const users = await storage.getUsers();
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
+  });
+
+  app.post("/api/admin/users", ensureAdmin, async (req, res) => {
+    try {
+      const validData = insertUserSchema.parse(req.body);
+      const existingUser = await storage.getUserByUsername(validData.username);
+      
+      if (existingUser) {
+        return res.status(400).json({ error: "Username already exists" });
+      }
+      
+      const existingEmail = await storage.getUserByEmail(validData.email);
+      if (existingEmail) {
+        return res.status(400).json({ error: "Email already exists" });
+      }
+      
+      const user = await storage.createUser(validData);
+      res.status(201).json(user);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: error.errors });
+      } else {
+        res.status(500).json({ error: "An unexpected error occurred" });
+      }
+    }
+  });
+
+  app.put("/api/admin/users/:id", ensureAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      // If updating email or username, check for uniqueness
+      if (req.body.email && req.body.email !== user.email) {
+        const existingEmail = await storage.getUserByEmail(req.body.email);
+        if (existingEmail && existingEmail.id !== userId) {
+          return res.status(400).json({ error: "Email already exists" });
+        }
+      }
+      
+      if (req.body.username && req.body.username !== user.username) {
+        const existingUser = await storage.getUserByUsername(req.body.username);
+        if (existingUser && existingUser.id !== userId) {
+          return res.status(400).json({ error: "Username already exists" });
+        }
+      }
+      
+      const updatedUser = await storage.updateUser(userId, req.body);
+      res.json(updatedUser);
+    } catch (error) {
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
+  });
+
+  // 5. Contact Messages Management
+  app.get("/api/admin/messages", ensureAdmin, async (req, res) => {
+    try {
+      const messages = await storage.getContactMessages();
+      res.json(messages);
+    } catch (error) {
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
+  });
+
+  // 6. Event Registration Management
+  app.get("/api/admin/events/:eventId/registrations", ensureAdmin, async (req, res) => {
+    try {
+      const eventId = parseInt(req.params.eventId);
+      const event = await storage.getEvent(eventId);
+      
+      if (!event) {
+        return res.status(404).json({ error: "Event not found" });
+      }
+      
+      const registrations = await storage.getEventRegistrations(eventId);
+      res.json(registrations);
+    } catch (error) {
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
+  });
+
+  // 7. Payment Management
+  app.get("/api/admin/payments", ensureAdmin, async (req, res) => {
+    try {
+      // Get all payments from all users
+      const allUsers = await storage.getUsers();
+      let allPayments = [];
+      
+      for (const user of allUsers) {
+        const userPayments = await storage.getUserPayments(user.id);
+        allPayments = [...allPayments, ...userPayments];
+      }
+      
+      // Sort by most recent
+      allPayments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      
+      res.json(allPayments);
+    } catch (error) {
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
@@ -199,4 +379,12 @@ function ensureAuthenticated(req: any, res: any, next: any) {
     return next();
   }
   res.status(401).json({ error: "Authentication required" });
+}
+
+// Middleware to ensure user is an admin
+function ensureAdmin(req: Request, res: Response, next: NextFunction) {
+  if (req.isAuthenticated() && req.user && req.user.role === 'admin') {
+    return next();
+  }
+  res.status(403).json({ error: "Admin access required" });
 }
