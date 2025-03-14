@@ -17,6 +17,7 @@ type AuthContextType = {
   registerMutation: UseMutationResult<SelectUser, Error, InsertUser>;
 };
 
+// This type must match what the server expects in passport LocalStrategy
 type LoginData = {
   email: string;
   password: string;

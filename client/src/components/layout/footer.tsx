@@ -34,7 +34,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <Link href="/">
-              <a className="flex items-center space-x-2 mb-4">
+              <div className="flex items-center space-x-2 mb-4 cursor-pointer">
                 <div className="h-10 w-10 bg-[#0F2C59] rounded-full flex items-center justify-center">
                   <span className="text-[#D4AF37] font-playfair font-bold text-lg">B</span>
                 </div>
@@ -42,7 +42,7 @@ const Footer = () => {
                   <h3 className="text-white font-playfair font-bold text-xl">BOSAN</h3>
                   <p className="text-xs text-gray-400">Body of Senior Advocates of Nigeria</p>
                 </div>
-              </a>
+              </div>
             </Link>
             <p className="text-gray-400 mb-6">The prestigious association of Senior Advocates committed to upholding the rule of law and excellence in legal practice.</p>
             <div className="flex space-x-4">
@@ -98,27 +98,27 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link href="/">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">Home</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">Home</span>
                 </Link>
               </li>
               <li>
                 <Link href="/about">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">About Us</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">About Us</span>
                 </Link>
               </li>
               <li>
                 <Link href="/events">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">Events</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">Events</span>
                 </Link>
               </li>
               <li>
                 <Link href="/members">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">Members</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">Members</span>
                 </Link>
               </li>
               <li>
                 <Link href="/contact">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">Contact</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">Contact</span>
                 </Link>
               </li>
             </ul>
@@ -129,27 +129,27 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link href="#">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">Legal Updates</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">Legal Updates</span>
                 </Link>
               </li>
               <li>
                 <Link href="#">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">Publications</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">Publications</span>
                 </Link>
               </li>
               <li>
                 <Link href="#">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">Media Gallery</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">Media Gallery</span>
                 </Link>
               </li>
               <li>
                 <Link href="#">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">FAQs</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">FAQs</span>
                 </Link>
               </li>
               <li>
                 <Link href="#">
-                  <a className="text-gray-400 hover:text-[#D4AF37] transition duration-300">Privacy Policy</a>
+                  <span className="text-gray-400 hover:text-[#D4AF37] transition duration-300 cursor-pointer">Privacy Policy</span>
                 </Link>
               </li>
             </ul>
