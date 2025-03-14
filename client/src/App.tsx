@@ -1,9 +1,10 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
+import { Loader2 } from "lucide-react";
 
 // Public pages
 import NotFound from "@/pages/not-found";
@@ -13,6 +14,7 @@ import EventsPage from "@/pages/events-page";
 import MembersPage from "@/pages/members-page";
 import ContactPage from "@/pages/contact-page";
 import AuthPage from "@/pages/auth-page";
+import AdminLoginPage from "@/pages/admin-login-page";
 
 // Member dashboard pages
 import DashboardPage from "@/pages/dashboard-page";
@@ -36,11 +38,23 @@ function AdminRoute({ component: Component, ...rest }: any) {
   const { user, isLoading } = useAuth();
   
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-border" />
+      </div>
+    );
   }
   
-  if (!user || user.role !== "admin") {
-    return <Route {...rest} component={NotFound} />;
+  if (!user) {
+    return <Route {...rest}><Redirect to="/admin/login" /></Route>;
+  }
+  
+  if (user.role !== "admin") {
+    return <Route {...rest}><div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
+      <p className="text-muted-foreground text-center mb-4">Your account does not have administrative privileges.</p>
+      <a href="/" className="text-primary hover:underline">Return to Home Page</a>
+    </div></Route>;
   }
   
   return <Route {...rest} component={Component} />;
@@ -56,6 +70,7 @@ function Router() {
       <Route path="/members" component={MembersPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/admin/login" component={AdminLoginPage} />
       
       {/* Member Dashboard Routes */}
       <ProtectedRoute path="/dashboard" component={DashboardPage} />
@@ -63,6 +78,8 @@ function Router() {
       <ProtectedRoute path="/payments" component={PaymentPage} />
       
       {/* Admin Routes */}
+      <AdminRoute path="/admin" component={AdminMembersPage} />
+      <AdminRoute path="/admin/dashboard" component={AdminMembersPage} />
       <AdminRoute path="/admin/members" component={AdminMembersPage} />
       <AdminRoute path="/admin/events" component={AdminEventsPage} />
       <AdminRoute path="/admin/resources" component={AdminResourcesPage} />

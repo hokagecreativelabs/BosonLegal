@@ -289,6 +289,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     }
   });
+  
+  // Temporary route to make a user an admin (for development purposes)
+  app.post("/api/promote-to-admin", async (req, res) => {
+    try {
+      const { username } = req.body;
+      if (!username) {
+        return res.status(400).send("Username is required");
+      }
+      
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+      
+      const updatedUser = await storage.updateUser(user.id, { role: "admin" });
+      
+      return res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error("Error promoting user:", error);
+      return res.status(500).send("Error promoting user to admin");
+    }
+  });
 
   app.put("/api/admin/users/:id", ensureAdmin, async (req, res) => {
     try {

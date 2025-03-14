@@ -19,7 +19,8 @@ type AuthContextType = {
 
 // This type must match what the server expects in passport LocalStrategy
 type LoginData = {
-  email: string;
+  username?: string;
+  email?: string;
   password: string;
 };
 
@@ -51,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     onError: (error: Error) => {
       toast({
         title: "Login failed",
-        description: error.message || "Invalid email or password",
+        description: error.message || "Invalid credentials",
         variant: "destructive",
       });
     },

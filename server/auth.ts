@@ -47,13 +47,28 @@ export function setupAuth(app: Express) {
 
   passport.use(
     new LocalStrategy(
-      { usernameField: "email" },
-      async (email, password, done) => {
-        const user = await storage.getUserByEmail(email);
-        if (!user || !(await comparePasswords(password, user.password))) {
-          return done(null, false);
-        } else {
-          return done(null, user);
+      { usernameField: "email", passwordField: "password", passReqToCallback: true },
+      async (req, email, password, done) => {
+        try {
+          // Check if we're using username login instead of email
+          if (req.body.username) {
+            const user = await storage.getUserByUsername(req.body.username);
+            if (!user || !(await comparePasswords(password, user.password))) {
+              return done(null, false);
+            } else {
+              return done(null, user);
+            }
+          } else {
+            // Regular email login
+            const user = await storage.getUserByEmail(email);
+            if (!user || !(await comparePasswords(password, user.password))) {
+              return done(null, false);
+            } else {
+              return done(null, user);
+            }
+          }
+        } catch (error) {
+          return done(error);
         }
       }
     )
