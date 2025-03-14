@@ -106,10 +106,10 @@ export class MemStorage implements IStorage {
   }
   
   private initializeData(): void {
-    // Create super admin account
+    // Create super admin account with hashed password using scrypt
     this.createUser({
       username: "admin",
-      password: "$2b$10$oPGP/WZQ2XFDUqMsbTJgPeYzcRCRGUkWAMVcAQ5LTwzpVrUte3z2.", // hashed password: "admin123"
+      password: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918.23b470cd5a4c3a2d3143959f8cdd7373", // hashed password: "admin"
       email: "admin@bosan.org.ng",
       fullName: "Super Administrator",
       role: "admin",
