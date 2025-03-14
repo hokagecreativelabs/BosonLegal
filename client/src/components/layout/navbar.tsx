@@ -44,54 +44,60 @@ const Navbar = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <Link href="/">
-                <div className="flex items-center space-x-2 cursor-pointer">
-                  <div className="h-10 w-10 bg-[#0F2C59] rounded-full flex items-center justify-center">
-                    <span className="text-[#D4AF37] font-playfair font-bold text-lg">B</span>
-                  </div>
-                  <div>
-                    <h1 className="text-[#0F2C59] font-playfair font-bold text-xl">BOSAN</h1>
-                    <p className="text-xs text-gray-500">Body of Senior Advocates of Nigeria</p>
-                  </div>
+              <div 
+                onClick={() => window.location.href = '/'}
+                className="flex items-center space-x-2 cursor-pointer">
+                <div className="h-10 w-10 bg-[#0F2C59] rounded-full flex items-center justify-center">
+                  <span className="text-[#D4AF37] font-playfair font-bold text-lg">B</span>
                 </div>
-              </Link>
+                <div>
+                  <h1 className="text-[#0F2C59] font-playfair font-bold text-xl">BOSAN</h1>
+                  <p className="text-xs text-gray-500">Body of Senior Advocates of Nigeria</p>
+                </div>
+              </div>
             </div>
             
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8 items-center">
-              <Link href="/">
-                <a className={`font-montserrat font-medium ${isHomePage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}>
-                  Home
-                </a>
-              </Link>
-              <Link href="/about">
-                <a className={`font-montserrat font-medium ${isAboutPage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}>
-                  About
-                </a>
-              </Link>
-              <Link href="/events">
-                <a className={`font-montserrat font-medium ${isEventsPage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}>
-                  Events
-                </a>
-              </Link>
-              <Link href="/members">
-                <a className={`font-montserrat font-medium ${isMembersPage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}>
-                  Members
-                </a>
-              </Link>
-              <Link href="/contact">
-                <a className={`font-montserrat font-medium ${isContactPage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}>
-                  Contact
-                </a>
-              </Link>
+              <div
+                onClick={() => window.location.href = '/'}
+                className={`font-montserrat font-medium cursor-pointer ${isHomePage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}
+              >
+                Home
+              </div>
+              <div
+                onClick={() => window.location.href = '/about'}
+                className={`font-montserrat font-medium cursor-pointer ${isAboutPage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}
+              >
+                About
+              </div>
+              <div
+                onClick={() => window.location.href = '/events'}
+                className={`font-montserrat font-medium cursor-pointer ${isEventsPage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}
+              >
+                Events
+              </div>
+              <div
+                onClick={() => window.location.href = '/members'}
+                className={`font-montserrat font-medium cursor-pointer ${isMembersPage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}
+              >
+                Members
+              </div>
+              <div
+                onClick={() => window.location.href = '/contact'}
+                className={`font-montserrat font-medium cursor-pointer ${isContactPage ? 'text-[#0F2C59]' : 'text-[#343A40]'} hover:text-[#D4AF37] transition duration-300`}
+              >
+                Contact
+              </div>
               
               {user ? (
                 <div className="flex items-center space-x-4">
-                  <Link href="/dashboard">
-                    <a className="font-montserrat bg-[#0F2C59] text-white px-5 py-2 rounded hover:bg-opacity-90 transition duration-300 flex items-center space-x-2">
-                      <span>Dashboard</span>
-                    </a>
-                  </Link>
+                  <div
+                    onClick={() => window.location.href = '/dashboard'}
+                    className="font-montserrat bg-[#0F2C59] text-white px-5 py-2 rounded hover:bg-opacity-90 transition duration-300 flex items-center space-x-2 cursor-pointer"
+                  >
+                    <span>Dashboard</span>
+                  </div>
                   <Button 
                     variant="outline" 
                     size="sm" 
@@ -137,29 +143,45 @@ const Navbar = () => {
                 className="md:hidden overflow-hidden"
               >
                 <div className="px-2 pt-2 pb-4 space-y-1 border-t">
-                  <Link href="/">
-                    <a className="block px-3 py-2 text-[#0F2C59] font-medium hover:bg-[#F8F9FA] rounded">Home</a>
-                  </Link>
-                  <Link href="/about">
-                    <a className="block px-3 py-2 text-[#343A40] font-medium hover:bg-[#F8F9FA] rounded">About</a>
-                  </Link>
-                  <Link href="/events">
-                    <a className="block px-3 py-2 text-[#343A40] font-medium hover:bg-[#F8F9FA] rounded">Events</a>
-                  </Link>
-                  <Link href="/members">
-                    <a className="block px-3 py-2 text-[#343A40] font-medium hover:bg-[#F8F9FA] rounded">Members</a>
-                  </Link>
-                  <Link href="/contact">
-                    <a className="block px-3 py-2 text-[#343A40] font-medium hover:bg-[#F8F9FA] rounded">Contact</a>
-                  </Link>
+                  <div
+                    onClick={() => window.location.href = '/'}
+                    className="block px-3 py-2 text-[#0F2C59] font-medium hover:bg-[#F8F9FA] rounded cursor-pointer"
+                  >
+                    Home
+                  </div>
+                  <div
+                    onClick={() => window.location.href = '/about'}
+                    className="block px-3 py-2 text-[#343A40] font-medium hover:bg-[#F8F9FA] rounded cursor-pointer"
+                  >
+                    About
+                  </div>
+                  <div
+                    onClick={() => window.location.href = '/events'}
+                    className="block px-3 py-2 text-[#343A40] font-medium hover:bg-[#F8F9FA] rounded cursor-pointer"
+                  >
+                    Events
+                  </div>
+                  <div
+                    onClick={() => window.location.href = '/members'}
+                    className="block px-3 py-2 text-[#343A40] font-medium hover:bg-[#F8F9FA] rounded cursor-pointer"
+                  >
+                    Members
+                  </div>
+                  <div
+                    onClick={() => window.location.href = '/contact'}
+                    className="block px-3 py-2 text-[#343A40] font-medium hover:bg-[#F8F9FA] rounded cursor-pointer"
+                  >
+                    Contact
+                  </div>
                   
                   {user ? (
                     <>
-                      <Link href="/dashboard">
-                        <a className="block w-full mt-2 font-montserrat bg-[#0F2C59] text-white px-5 py-2 rounded hover:bg-opacity-90 transition duration-300 text-center">
-                          Dashboard
-                        </a>
-                      </Link>
+                      <div
+                        onClick={() => window.location.href = '/dashboard'}
+                        className="block w-full mt-2 font-montserrat bg-[#0F2C59] text-white px-5 py-2 rounded hover:bg-opacity-90 transition duration-300 text-center cursor-pointer"
+                      >
+                        Dashboard
+                      </div>
                       <button 
                         className="block w-full mt-2 font-montserrat border border-[#0F2C59] text-[#0F2C59] px-5 py-2 rounded hover:bg-[#0F2C59] hover:text-white transition duration-300 text-center"
                         onClick={handleLogout}
