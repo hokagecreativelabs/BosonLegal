@@ -49,8 +49,16 @@ export default function AdminLoginPage() {
             title: "Login successful",
             description: "Welcome to the admin dashboard.",
           });
+          window.location.href = '/admin/dashboard';
         }
       },
+      onError: () => {
+        toast({
+          title: "Login failed",
+          description: "Please check your credentials and try again.",
+          variant: "destructive",
+        });
+      }
     });
   };
 
